@@ -1,0 +1,28 @@
+Create a NFS-Automount Service
+
+
+nano /etc/systemd/system/xxx-xxx-xxx.mount
+
+[Unit]
+Description=Mount NFS Share
+
+[Mount]
+What=192.168.xxx.xxx:/HA-Pool/nfs_shared_folder/ # NFS-Share to mount
+Where=/xxx/xxx/xxx # MountPoint - filename xxx-xxx-xxx.mount
+Type=nfs
+Options=rw,relatime,vers=4.2,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,local_lock=none
+
+
+nano /etc/systemd/system/xxx-xxx-xxx.utomount
+[Unit]
+Description=Automount NFS-Share
+Requires=NetworkManager.service
+After=network-online.target
+Wants=network-online.target
+
+[Automount]
+Where=/xxx/xxx/xxx
+TimeoutIdleSec=10min
+
+[Install]
+WantedBy=multi-user.target
